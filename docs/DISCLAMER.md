@@ -1,1 +1,3 @@
-DISCLAMER - I will be using AI as an assistive tool in this. I will, however NOT being telling claude or some other model to just do it for me. This will be MY work, with researching assisted by AI
+# DISCLAMER 
+
+- I will be using AI as an assistive tool in this. I will, however NOT being telling claude or some other model to just do it for me. This will be MY work, with researching assisted by AI
