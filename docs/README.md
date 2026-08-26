@@ -1,7 +1,7 @@
 # minecraft-status-bot-v2
 A new and improved MCSB
 
-Plan for MCSB-V2
+## Plan for MCSB-V2
  - [ ] Configurable from a JSON file
  - [ ] Run in 4 different modes
    - [ ] Standalone
