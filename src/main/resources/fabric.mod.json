@@ -2,7 +2,7 @@
 	"schemaVersion": 1,
 	"id": "mcsb",
 	"version": "${version}",
-	"name": "MCSB",
+	"name": "mcsb",
 	"description": "This is an example description! Tell everyone what your mod is about!",
 	"authors": [
 		"Me!"
@@ -16,10 +16,10 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"tvs.mcsb.MCSB"
+			"tvs.mcsb.Mcsb"
 		],
 		"client": [
-			"tvs.mcsb.client.MCSBClient"
+			"tvs.mcsb.client.McsbClient"
 		]
 	},
 	"mixins": [
