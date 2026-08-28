@@ -21,7 +21,9 @@ public class Mcsb implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		LOGGER.info("Hello Fabric world!");
+		LOGGER.info("MCSB | Initializing Minecraft Status Bot V2");
+		ConfigHelper.init();
+
 	}
 
 	public static Identifier id(String path) {
