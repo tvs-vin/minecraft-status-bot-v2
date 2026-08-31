@@ -33,6 +33,10 @@ dependencies {
 	// Embed Javalin and its runtime dependencies in the mod jar.
 	implementation "io.javalin:javalin:${project.javalin_version}"
 	include "io.javalin:javalin:${project.javalin_version}"
+
+	// Embed OSHI (system/hardware info) and its runtime dependencies in the mod jar.
+	implementation "com.github.oshi:oshi-core:${project.oshi_version}"
+	include "com.github.oshi:oshi-core:${project.oshi_version}"
 }
 
 processResources {

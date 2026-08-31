@@ -35,3 +35,4 @@ public class Mcsb implements ModInitializer {
 		return Identifier.fromNamespaceAndPath(MOD_ID, path);
 	}
 }
+

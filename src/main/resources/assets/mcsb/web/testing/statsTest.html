@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCSB Stats Test</title>
+<style>
+    body { font-family: sans-serif; background: #1a1023; color: #e6e0f8; padding: 1.5rem; }
+    h1 { margin-top: 0; }
+    .panel { background: #2e1a47; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+    .panel h2 { margin-top: 0; font-size: 1.1rem; }
+    .stat-row { display: flex; justify-content: space-between; padding: 0.15rem 0; }
+    .status { font-size: 0.85rem; opacity: 0.8; }
+    #chatLog { height: 200px; overflow-y: auto; background: #1a1023; border-radius: 6px; padding: 0.5rem; font-size: 0.9rem; }
+    #chatLog p { margin: 0.15rem 0; }
+    #playerList { list-style: none; margin: 0; padding: 0; }
+    #playerList li { padding: 0.15rem 0; }
+</style>
+</head>
+<body>
+    <h1>MCSB Stats Test Page</h1>
+    <p class="status">Demo page showing how the planned /ws/system, /ws/chat and /ws/players endpoints are consumed from the front end.</p>
+
+    <div class="panel">
+        <h2>Hardware (/ws/system)</h2>
+        <p class="status" id="systemStatus">connecting...</p>
+        <div class="stat-row"><span>CPU load</span><span id="cpuLoad">--</span></div>
+        <div class="stat-row"><span>RAM used / total</span><span id="ram">--</span></div>
+        <div class="stat-row"><span>CPU temp</span><span id="cpuTemp">--</span></div>
+        <div class="stat-row"><span>Disk used (install dir)</span><span id="disk">--</span></div>
+    </div>
+
+    <div class="panel">
+        <h2>Chat (/ws/chat)</h2>
+        <p class="status" id="chatStatus">connecting...</p>
+        <div id="chatLog"></div>
+    </div>
+
+    <div class="panel">
+        <h2>Players (/ws/players)</h2>
+        <p class="status" id="playersStatus">connecting...</p>
+        <ul id="playerList"></ul>
+    </div>
+
+    <script>
+        const wsProtocol = location.protocol === "https:" ? "wss://" : "ws://";
+        const wsBase = wsProtocol + location.host;
+
+        function bytesToGB(bytes) {
+            return (bytes / (1024 ** 3)).toFixed(2) + " GB";
+        }
+
+        // Reconnects on unexpected close; stops retrying if the server reports the feature is disabled.
+        function connect(path, statusElId, onMessage) {
+            const statusEl = document.getElementById(statusElId);
+            const socket = new WebSocket(wsBase + path);
+
+            socket.onopen = () => { statusEl.textContent = "connected"; };
+
+            socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data.error) {
+                    statusEl.textContent = "disabled in config";
+                    socket.close();
+                    return;
+                }
+                onMessage(data);
+            };
+
+            socket.onclose = () => {
+                if (statusEl.textContent !== "disabled in config") {
+                    statusEl.textContent = "disconnected, retrying...";
+                    setTimeout(() => connect(path, statusElId, onMessage), 5000);
+                }
+            };
+
+            socket.onerror = () => socket.close();
+        }
+
+        connect("/ws/system", "systemStatus", (data) => {
+            document.getElementById("cpuLoad").textContent = data.cpuLoadPercent.toFixed(1) + "%";
+            document.getElementById("ram").textContent = bytesToGB(data.ramUsedBytes) + " / " + bytesToGB(data.ramTotalBytes);
+            document.getElementById("cpuTemp").textContent = data.cpuTempC != null ? data.cpuTempC.toFixed(1) + " °C" : "N/A";
+            document.getElementById("disk").textContent = bytesToGB(data.diskUsedBytes);
+        });
+
+        connect("/ws/chat", "chatStatus", (data) => {
+            const chatLog = document.getElementById("chatLog");
+            const entries = data.type === "history" ? data.messages : [data];
+            entries.forEach(entry => {
+                const line = document.createElement("p");
+                const time = new Date(entry.timestamp).toLocaleTimeString();
+                line.textContent = `[${time}] ${entry.player}: ${entry.message}`;
+                chatLog.appendChild(line);
+            });
+            chatLog.scrollTop = chatLog.scrollHeight;
+        });
+
+        connect("/ws/players", "playersStatus", (data) => {
+            const list = document.getElementById("playerList");
+            list.innerHTML = "";
+            data.players.forEach(player => {
+                const item = document.createElement("li");
+                item.textContent = player.name;
+                list.appendChild(item);
+            });
+        });
+    </script>
+</body>
+</html>
