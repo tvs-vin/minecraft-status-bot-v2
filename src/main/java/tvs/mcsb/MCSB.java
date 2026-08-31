@@ -23,7 +23,12 @@ public class Mcsb implements ModInitializer {
 
 		LOGGER.info("MCSB | Initializing Minecraft Status Bot V2");
 		ConfigHelper.init();
-
+		if (ConfigHelper.webUI) {
+			WebServer.start();
+		}
+		if(Utility.logCheck(2)){
+			LOGGER.debug("MCSB | Finished Init");
+		}
 	}
 
 	public static Identifier id(String path) {

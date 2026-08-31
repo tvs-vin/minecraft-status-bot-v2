@@ -29,6 +29,9 @@ public class ConfigHelper {
     public static boolean chatMonitoring = false; // Chat monitoring enabler. Used for features like having chat be copied into a channel or view on WebUI
     public static boolean hardwareMonitoring = false; // Hardware monitoring to see stats like ram, cpu, and storage usage.
 
+    // WebUI values
+    public static int webUIPort = 8080; // Port for the Web UI
+
     // Debug values
     public static boolean debugEnabled = false; // Enables debug features and extra logs. No debug toggle will work with this disabled. Also sets log level to 1
     public static int logLevel = 1; // Int that controls the amount of stuff being logged based on importance.
@@ -57,7 +60,7 @@ public class ConfigHelper {
         );
         mode = properties.getProperty(
                 "mode",
-                "default"
+                "Standalone"
         );
         managerAddress = properties.getProperty(
                 "managerAddress",
@@ -86,6 +89,9 @@ public class ConfigHelper {
         logLevel = Integer.parseInt(
                 properties.getProperty("logLevel", "1")
         );
+        webUIPort = Integer.parseInt(
+                properties.getProperty("webUIPort", "8080")
+        );
 
         saveDefaults(properties);
 
@@ -106,6 +112,7 @@ public class ConfigHelper {
                 properties.setProperty("chatMonitoring", Boolean.toString(chatMonitoring));
                 properties.setProperty("hardwareMonitoring", Boolean.toString(hardwareMonitoring));
                 properties.setProperty("logLevel", Integer.toString(logLevel));
+                properties.setProperty("webUIPort", Integer.toString(webUIPort));
                 properties.store(writer, "Minecraft Status Bot configuration - See WIKI for usecase");
             }
         } catch (IOException exception) {

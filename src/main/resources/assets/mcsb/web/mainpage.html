@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minecraft Status Bot</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header">
+        <h1>Minecraft Status Bot</h1>
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="home">Home</button>
+            <button class="tab-btn" data-tab="settings">Settings</button>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="tab-content active">
+            <div class="card">
+                <h2>Server Status</h2>
+                <p>Everything looks good here. Content for the home tab goes here.</p>
+            </div>
+        </section>
+
+        <section id="settings" class="tab-content">
+            <div class="card">
+                <h2>Theme Settings</h2>
+                <p>Customize the site's theme colors. Changes are saved automatically.</p>
+
+                <div class="setting-row">
+                    <label for="primaryColor">Primary Color</label>
+                    <input type="color" id="primaryColor" value="#2e1a47">
+                </div>
+                <div class="setting-row">
+                    <label for="secondaryColor">Secondary Color</label>
+                    <input type="color" id="secondaryColor" value="#4b2e83">
+                </div>
+                <div class="setting-row">
+                    <label for="accentColor">Accent Color</label>
+                    <input type="color" id="accentColor" value="#5865f2">
+                </div>
+                <div class="setting-row">
+                    <label for="bgColor">Background Color</label>
+                    <input type="color" id="bgColor" value="#1a1023">
+                </div>
+                <div class="setting-row">
+                    <label for="textColor">Text Color</label>
+                    <input type="color" id="textColor" value="#e6e0f8">
+                </div>
+
+                <div class="setting-actions">
+                    <button id="resetTheme" class="btn">Reset to Default</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2024 Minecraft Status Bot</p>
+    </footer>
+
+    <script>
+        // Default theme (dark purple with blue tones)
+        const defaultTheme = {
+            "--color-primary": "#2e1a47",
+            "--color-secondary": "#4b2e83",
+            "--color-accent": "#5865f2",
+            "--color-bg": "#1a1023",
+            "--color-text": "#e6e0f8"
+        };
+
+        const themeMap = {
+            "--color-primary": "primaryColor",
+            "--color-secondary": "secondaryColor",
+            "--color-accent": "accentColor",
+            "--color-bg": "bgColor",
+            "--color-text": "textColor"
+        };
+
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            Object.entries(theme).forEach(([key, value]) => {
+                root.style.setProperty(key, value);
+                const inputId = themeMap[key];
+                if (inputId) {
+                    const input = document.getElementById(inputId);
+                    if (input) input.value = value;
+                }
+            });
+        }
+
+        function loadTheme() {
+            const saved = localStorage.getItem("themeConfig");
+            const theme = saved ? JSON.parse(saved) : defaultTheme;
+            applyTheme(theme);
+        }
+
+        function saveTheme() {
+            const theme = {};
+            Object.entries(themeMap).forEach(([cssVar, inputId]) => {
+                const input = document.getElementById(inputId);
+                theme[cssVar] = input.value;
+            });
+            localStorage.setItem("themeConfig", JSON.stringify(theme));
+            applyTheme(theme);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadTheme();
+
+            // Tab switching
+            const tabButtons = document.querySelectorAll(".tab-btn");
+            const tabContents = document.querySelectorAll(".tab-content");
+            tabButtons.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    tabButtons.forEach(b => b.classList.remove("active"));
+                    tabContents.forEach(c => c.classList.remove("active"));
+                    btn.classList.add("active");
+                    document.getElementById(btn.dataset.tab).classList.add("active");
+                });
+            });
+
+            // Live theme editing
+            Object.values(themeMap).forEach(inputId => {
+                document.getElementById(inputId).addEventListener("input", saveTheme);
+            });
+
+            // Reset button
+            document.getElementById("resetTheme").addEventListener("click", () => {
+                localStorage.removeItem("themeConfig");
+                applyTheme(defaultTheme);
+            });
+        });
+    </script>
+</body>
+</html>

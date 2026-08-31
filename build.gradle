@@ -29,6 +29,10 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// Embed Javalin and its runtime dependencies in the mod jar.
+	implementation "io.javalin:javalin:${project.javalin_version}"
+	include "io.javalin:javalin:${project.javalin_version}"
 }
 
 processResources {
