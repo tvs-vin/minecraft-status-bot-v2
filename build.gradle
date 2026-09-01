@@ -11,6 +11,10 @@ repositories {
 	// for more information about repositories.
 }
 
+configurations {
+	jdaRuntime
+}
+
 loom {
 	splitEnvironmentSourceSets()
 
@@ -37,6 +41,13 @@ dependencies {
 	// Embed OSHI (system/hardware info) and its runtime dependencies in the mod jar.
 	implementation "com.github.oshi:oshi-core:${project.oshi_version}"
 	include "com.github.oshi:oshi-core:${project.oshi_version}"
+
+	// Embed JDA and its declared runtime dependencies in the mod jar.
+	implementation "net.dv8tion:JDA:${project.jda_version}"
+	jdaRuntime "net.dv8tion:JDA:${project.jda_version}"
+	configurations.jdaRuntime.resolvedConfiguration.resolvedArtifacts.each { artifact ->
+		include "${artifact.moduleVersion.id.group}:${artifact.name}:${artifact.moduleVersion.id.version}"
+	}
 }
 
 processResources {

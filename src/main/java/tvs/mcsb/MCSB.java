@@ -3,6 +3,8 @@ package tvs.mcsb;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.resources.Identifier;
+import tvs.mcsb.commands.MainCommands;
+import tvs.mcsb.discord.DiscordBot;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,15 @@ public class Mcsb implements ModInitializer {
 		if (ConfigHelper.webUI) {
 			WebServer.start();
 		}
+		if(ConfigHelper.discordIntegration){
+			if(Utility.logCheck(3)){
+				LOGGER.info("MCSB | Discord bot Enabled");
+			}
+			DiscordBot.initBot();
+		}
+
+		MainCommands.register();
+
 		if(Utility.logCheck(2)){
 			LOGGER.debug("MCSB | Finished Init");
 		}

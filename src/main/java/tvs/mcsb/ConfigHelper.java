@@ -29,12 +29,17 @@ public class ConfigHelper {
     public static boolean chatMonitoring = false; // Chat monitoring enabler. Used for features like having chat be copied into a channel or view on WebUI
     public static boolean hardwareMonitoring = false; // Hardware monitoring to see stats like ram, cpu, and storage usage.
 
+    // Discord related values
+    public static String discordToken; // Token for the Discord bot
+    public static boolean discordBotCommandOutput; // Enables any command ran to have output in the minecraft servers console
+
     // WebUI values
     public static int webUIPort = 8080; // Port for the Web UI
 
     // Debug values
     public static boolean debugEnabled = false; // Enables debug features and extra logs. No debug toggle will work with this disabled. Also sets log level to 1
     public static int logLevel = 1; // Int that controls the amount of stuff being logged based on importance.
+    public static boolean javalinLogs = false; // Javalin logs enabler - Useful for debug but clogs logfile
     
     
 
@@ -92,6 +97,16 @@ public class ConfigHelper {
         webUIPort = Integer.parseInt(
                 properties.getProperty("webUIPort", "8080")
         );
+        discordToken = properties.getProperty(
+                "discordToken",
+                ""
+        );
+        javalinLogs = Boolean.parseBoolean(
+                properties.getProperty("javalinLogs", "false")
+        );
+        discordBotCommandOutput = Boolean.parseBoolean(
+                properties.getProperty("discordBotCommandOutput", "false")
+        );
 
         saveDefaults(properties);
 
@@ -113,6 +128,9 @@ public class ConfigHelper {
                 properties.setProperty("hardwareMonitoring", Boolean.toString(hardwareMonitoring));
                 properties.setProperty("logLevel", Integer.toString(logLevel));
                 properties.setProperty("webUIPort", Integer.toString(webUIPort));
+                properties.setProperty("discordToken", discordToken);
+                properties.setProperty("javalinLogs", Boolean.toString(javalinLogs));
+                properties.setProperty("discordBotCommandOutput", Boolean.toString(discordBotCommandOutput));
                 properties.store(writer, "Minecraft Status Bot configuration - See WIKI for usecase");
             }
         } catch (IOException exception) {
