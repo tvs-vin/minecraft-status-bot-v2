@@ -1,4 +1,4 @@
-package tvs.mcsb.discord;
+package tvs.mcsb.features.discord;
 
 // Imports
 

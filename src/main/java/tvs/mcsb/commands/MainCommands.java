@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.permissions.Permissions;
 
 import tvs.mcsb.ConfigHelper;
-import tvs.mcsb.discord.DiscordBot;
+import tvs.mcsb.features.discord.DiscordBot;
 
 public class MainCommands {
 

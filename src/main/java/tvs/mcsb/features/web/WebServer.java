@@ -1,4 +1,8 @@
-package tvs.mcsb;
+package tvs.mcsb.features.web;
+
+import tvs.mcsb.ConfigHelper;
+import tvs.mcsb.Mcsb;
+import tvs.mcsb.Utility;
 
 import io.javalin.Javalin;
 import io.javalin.util.JavalinLogger;

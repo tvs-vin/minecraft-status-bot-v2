@@ -3,8 +3,10 @@ package tvs.mcsb;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.resources.Identifier;
+
 import tvs.mcsb.commands.MainCommands;
-import tvs.mcsb.discord.DiscordBot;
+import tvs.mcsb.features.discord.DiscordBot;
+import tvs.mcsb.features.web.WebServer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
