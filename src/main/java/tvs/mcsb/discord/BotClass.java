@@ -75,18 +75,8 @@ public class BotClass implements Runnable {
             }
 
             //Adds all commands
-            jda.updateCommands().addCommands(Objects.requireNonNull(commandList)).queue(
-                success -> {
-                    if(Utility.logCheck(2)) {
-                        Mcsb.LOGGER.info("Successfully synced " + commandList.size() + " commands!");
-                    }
-                },
-                failure -> {
-                    if(Utility.logCheck(1)) {
-                        Mcsb.LOGGER.error("Failed to sync commands: " + failure.getMessage());
-                    }
-                }
-            );
+            
+            updateCommands();
 
         } catch (InterruptedException e) {
             Mcsb.LOGGER.error("MCSB | Discord bot interrupted | ", e);
@@ -95,6 +85,24 @@ public class BotClass implements Runnable {
             Mcsb.LOGGER.error("MCSB | Discord bot encountered an error | ", e);
             e.printStackTrace();
         }
+    }
+
+    public void updateCommands() {
+        if(Utility.logCheck(3)){
+            Mcsb.LOGGER.info("MCSB | Updating Discord bot commands");
+        }
+        jda.updateCommands().addCommands(Objects.requireNonNull(commandList)).queue(
+            success -> {
+                if(Utility.logCheck(2)) {
+                    Mcsb.LOGGER.info("Successfully synced " + commandList.size() + " commands!");
+                }
+            },
+            failure -> {
+                if(Utility.logCheck(1)) {
+                    Mcsb.LOGGER.error("Failed to sync commands: " + failure.getMessage());
+                }
+            }
+        );
     }
     
     public JDA getJda() {

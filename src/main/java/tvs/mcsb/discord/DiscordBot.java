@@ -2,6 +2,8 @@ package tvs.mcsb.discord;
 
 // Imports
 
+import net.dv8tion.jda.api.JDA;
+
 import tvs.mcsb.ConfigHelper;
 import tvs.mcsb.Mcsb;
 import tvs.mcsb.Utility;
@@ -30,6 +32,12 @@ public class DiscordBot {
         }
         botThread.start();
 
+    }
+
+    public static void updateCommands() {
+        if(botTask != null) {
+            botTask.updateCommands();
+        }
     }
 
     public static void initBot() {
